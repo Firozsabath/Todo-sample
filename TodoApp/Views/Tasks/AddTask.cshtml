@@ -1,0 +1,33 @@
+﻿@model TodoApp.DTO.TasksDTO
+@{
+    ViewData["Title"] = "AddTask";
+    Layout = "";
+}
+
+<h4>Add Task</h4>
+<div>
+    <form asp-action="CreateTask" asp-route-id="TaskID" id="fmcreateTasks" onsubmit="return jQueryAjaxPost(this,'MyTasks',event);">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col col-12">
+                        <label asp-for="Title" class="control-label"></label>
+                        <input asp-for="Title" type="text" class="form-control" />
+                        <div class="invalid-feedback">Title is Required.</div>
+                    </div>
+                    <div class="col col-12">
+                        <label asp-for="Description" class="control-label"></label>
+                        <textarea asp-for="Description" class="form-control"></textarea>
+                        <div class="invalid-feedback">Description is Required.</div>
+                    </div>
+                    <div class="col col-12">
+                        <label asp-for="EmployeeID" class="control-label"></label>
+                        <select asp-for="EmployeeID" class="form-control" asp-items="@(new SelectList(ViewBag.employeeList, "ID", "FullName"))"></select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-danger float-right mt-3"> Add task </button>
+            </div>
+        </div>
+    </form>
+</div>
+

@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TodoApp</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Todo App</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <div class="modal" tabindex="-1" role="dialog" id="form-modal">
+        <div class="modal-dialog" style="max-width:1000px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2024 - TodoApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/notify.min.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @await RenderSectionAsync("Scripts", required: false)
+    <script type="text/javascript">
+
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+
+        })();
+
+        jQueryAjaxPost = (form, id, event) => {
+
+            try {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: form.action,
+                    data: new FormData(form),
+                    contentType: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.isValid) {
+                            $("#mainContent").load('@Url.Action("ReturnPartials", "Tasks")', { Type: id });
+                            $("#form-modal .modal-body").html("");
+                            $("#form-modal .modal-title").html("");
+                            $("#form-modal").modal("hide");
+                            $.notify("Saved Successfully", { globalPosition: 'top right', className: 'success' });
+                        }
+                        //else
+                        //    $("form-modal .modal-body").html(res);
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                })
+
+            } catch (e) {
+                console.log(e);
+            }
+
+            return false;
+        }
+
+    </script>
+</body>
+</html>

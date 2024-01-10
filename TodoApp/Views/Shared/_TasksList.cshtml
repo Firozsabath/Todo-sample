@@ -1,0 +1,21 @@
+﻿@model List<TodoApp.DTO.TasksDTO>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@foreach (var task in Model)
+{
+    <div class="card mb-3">
+        <div class="card-header">
+            <div class="row">
+                <div class="col col-md-4"><p>@task.Title</p></div>
+                <div class="col col-md-4"></div>
+                <div class="col col-md-4"><p>User Allocated:@task.Employee</p></div>
+            </div>            
+        </div>
+        <div class="card-body">
+            <div>
+                <p>@task.Description</p>
+            </div>
+        </div>
+    </div>
+}

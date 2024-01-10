@@ -1,0 +1,41 @@
+﻿@model List<TodoApp.DTO.TasksDTO>
+
+<div class="container">
+    <div>
+        <button type="button" id="addTasks" class="btn btn-danger mb-2">Add Task</button>
+    </div>
+    @if (Model.FirstOrDefault() != null)
+    {
+    <div id="mainContent">
+        <partial name="~/Views/Shared/_TasksList.cshtml" model="Model" />
+    </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body text-center">
+                <p>No tasks created yet!!</p>
+            </div>
+        </div>
+    }
+</div> 
+@section Scripts{ 
+
+    <script type="text/javascript">
+            $(document).ready(function () {
+                $("#addTasks").click(function () {
+                   $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("AddTask", "Tasks")',                       
+                        traditional: true,
+                        success: function (res) {
+                            $("#form-modal .modal-body").html(res);
+                            $("#form-modal .modal-title").html("Tasks");
+                            $("#form-modal").modal("show");
+                        }
+                     });
+                });
+            });
+    </script>
+
+}
